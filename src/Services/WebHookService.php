@@ -7,7 +7,7 @@ use PsychoB\WebHook\Models\Payload;
 
 class WebHookService
 {
-    public const DEFAULT_USER_AGENT = 'psychob/laravel-webhook php/'.PHP_VERSION;
+    public const DEFAULT_USER_AGENT = 'psychob/laravel-webhook php/' . PHP_VERSION;
 
     /**
      * @param string $method
@@ -39,5 +39,14 @@ class WebHookService
         SendWebHookJob::dispatch($payload)->onQueue(config('webhook.queue_name', 'webhook'));
 
         return $payload->uuid;
+    }
+
+    public function verify(string $hmac, string $response, ?string $secret = null): bool
+    {
+        if ($secret === null) {
+            $secret = config('webhook.secret');
+        }
+
+        return hash_hmac('sha512', $response, $secret) === $hmac;
     }
 }
