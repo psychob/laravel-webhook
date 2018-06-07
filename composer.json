@@ -1,0 +1,39 @@
+{
+  "name": "psychob/laravel-webhook",
+  "description": "A WebHook package",
+  "keywords": [
+    "laravel", "webhook"
+  ],
+  "type": "library",
+  "require": {
+    "php": ">=7.1",
+    "guzzlehttp/guzzle": "^5||^6",
+    "laravel/framework": ">=5.6",
+    "ramsey/uuid": "^3.7"
+  },
+  "license": "MPL-2.0",
+  "authors": [
+    {
+      "name": "Andrzej Budzanowski",
+      "email": "kontakt@andrzej.budzanowski.pl"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "PsychoB\\WebHook\\": "./src"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "PsychoB\\WebHook\\Providers\\WebHookProvider"
+      ],
+      "aliases": {
+        "WebHook": "PsychoB\\WebHook\\Facades\\WebHook"
+      }
+    }
+  },
+  "config": {
+    "sort-packages": true
+  }
+}
