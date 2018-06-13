@@ -36,6 +36,8 @@ class WebHookService
 
         $payload->save();
 
+        \Log::debug('Creating new payload: '.$method.' '.$url.' UUID: '.$payload->uuid);
+
         SendWebHookJob::dispatch($payload)->onQueue(config('webhook.queue_name', 'webhook'));
 
         return $payload->uuid;

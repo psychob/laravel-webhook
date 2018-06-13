@@ -19,6 +19,8 @@ class WebHookSenderService
 {
     public function send(WebPayload $payload)
     {
+        \Log::debug('Sending new request for payload: '.$payload->uuid);
+
         $requestUuid = UuidService::random();
         $data = [
             'payload_uuid' => $payload->uuid,
