@@ -1,5 +1,9 @@
 # Laravel WebHook
 
+## Requirements
+This library requires configured queue mechanism, as webhooks are
+dispatched asynchronously through queue.
+
 ## Setup
 
 To get Laravel WebHook ready for use in your project, take the usual steps for setting up a Laravel package.

@@ -142,7 +142,7 @@ class WebHookSenderService
         $webHookRequest->response_headers = $this->extractRequestHeaders($webResponse);
         $webHookRequest->response_body = $webResponse->getBody()->getContents();
 
-        if ($webResponse->getStatusCode() === Response::HTTP_OK) {
+        if ($webResponse->getStatusCode() >= 200 && $webResponse->getStatusCode() < 300) {
             $payload->status = WebPayload::STATUS_OK;
 
             $this->reportSuccess($payload, $webHookRequest);
