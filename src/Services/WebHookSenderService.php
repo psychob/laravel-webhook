@@ -39,6 +39,7 @@ class WebHookSenderService
             'Content-Type' => 'application/json',
             'User-Agent' => $payload->user_agent,
             'X-WebHook-Integrity' => $this->calculateIntegrityOf($encoded),
+            'Accept' => 'application/json',
         ], $payload->request_headers), $encoded);
 
         $webHookRequest = new WebRequest([
