@@ -40,8 +40,9 @@ class FakeWebHookService
             'request_method' => $method,
             'request_url' => $url,
             'user_agent' => $userAgent,
-            'uuid' => UuidService::random(),
         ]);
+
+        $payload->uuid = UuidService::random();
 
         $this->payloads[] = $payload;
 
@@ -57,7 +58,7 @@ class FakeWebHookService
         return hash_hmac('sha512', $response, $secret) === $hmac;
     }
 
-    public function assertWebHookCountSend(int $count)
+    public function assertWebHookCount(int $count)
     {
         PHPUnit::assertEquals($count, count($this->payloads));
     }
