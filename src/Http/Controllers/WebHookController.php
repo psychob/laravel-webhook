@@ -48,7 +48,19 @@ class WebHookController extends Controller
      */
     public function listInbounds()
     {
-        return ReceivedRequest::orderBy('updated_at', 'DESC')->paginate(15);
+        $paginator = ReceivedRequest::orderBy('updated_at', 'DESC')->paginate(15);
+        $paginator->getCollection()->transform(function ($element) {
+            $e = $element->toArray();
+
+            $transformed = json_decode($e['data'], true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $e['data'] = $transformed;
+            }
+
+            return $e;
+        });
+
+        return $paginator;
     }
 
     /**
@@ -58,6 +70,23 @@ class WebHookController extends Controller
      */
     public function listOutbounds()
     {
-        return WebRequest::orderBy('updated_at', 'DESC')->paginate(15);
+        $paginator = WebRequest::orderBy('updated_at', 'DESC')->paginate(15);
+        $paginator->getCollection()->transform(function ($element) {
+            $e = $element->toArray();
+
+            $transformed = json_decode($e['request_body'], true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $e['request_body'] = $transformed;
+            }
+
+            $transformed = json_decode($e['response_body'], true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $e['response_body'] = $transformed;
+            }
+
+            return $e;
+        });
+
+        return $paginator;
     }
 }
