@@ -4,6 +4,7 @@ namespace PsychoB\WebHook\Services;
 
 use PsychoB\WebHook\Jobs\SendWebHookJob;
 use PsychoB\WebHook\Models\Payload;
+use PsychoB\WebHook\Testing\FakeWebHookService;
 
 class WebHookService
 {
