@@ -8,7 +8,7 @@ use PsychoB\WebHook\Testing\FakeWebHookService;
 
 class WebHook extends Facade
 {
-    public function fake()
+    public static function fake()
     {
         static::swap(new FakeWebHookService());
     }

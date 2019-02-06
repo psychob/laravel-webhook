@@ -9,6 +9,7 @@ namespace PsychoB\WebHook\Testing;
 
 use PHPUnit\Framework\Assert as PHPUnit;
 use PsychoB\WebHook\Models\Payload;
+use PsychoB\WebHook\Services\UuidService;
 
 class FakeWebHookService
 {
@@ -39,6 +40,7 @@ class FakeWebHookService
             'request_method' => $method,
             'request_url' => $url,
             'user_agent' => $userAgent,
+            'uuid' => UuidService::random(),
         ]);
 
         $this->payloads[] = $payload;
