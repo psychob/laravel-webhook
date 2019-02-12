@@ -66,11 +66,20 @@ class WebHookController extends Controller
     /**
      * Return all webhooks that were send by application
      *
+     * @param Request $request
      * @return mixed
      */
-    public function listOutbounds()
+    public function listOutbounds(Request $request)
     {
-        $paginator = WebRequest::orderBy('updated_at', 'DESC')->paginate(15);
+        $filter = $request->get('filter');
+
+        $paginator = WebRequest::orderBy('updated_at', 'DESC');
+        if ($filter) {
+            $paginator->where('request_body', 'like', '%'.$filter.'%')->orWhere('response_body', 'like', '%'.$filter.'%');
+        }
+
+        $paginator = $paginator->paginate(15);
+
         $paginator->getCollection()->transform(function ($element) {
             $e = $element->toArray();
 
@@ -83,6 +92,8 @@ class WebHookController extends Controller
             if (json_last_error() === JSON_ERROR_NONE) {
                 $e['response_body'] = $transformed;
             }
+
+            $e['request_headers'] = explode(PHP_EOL, $e['request_headers']);
 
             return $e;
         });
