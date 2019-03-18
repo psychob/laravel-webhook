@@ -30,7 +30,11 @@ class SendWebHookJob implements ShouldQueue
 
     public function handle(WebHookSenderService $service)
     {
-        $service->send($this->payload);
+        $e = $service->send($this->payload);
+
+        if ($e) {
+            $this->fail($e);
+        }
     }
 
     public function tags()

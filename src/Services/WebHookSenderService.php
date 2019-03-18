@@ -17,7 +17,10 @@ use Psr\Http\Message\ResponseInterface;
 
 class WebHookSenderService
 {
-    public function send(WebPayload $payload)
+    /** @var \Exception|null */
+    protected $exceptionReported = null;
+
+    public function send(WebPayload $payload): ?\Exception
     {
         \Log::debug('Sending new request for payload: '.$payload->uuid);
 
@@ -64,6 +67,8 @@ class WebHookSenderService
 
         $webHookRequest->save();
         $payload->save();
+
+        return $this->exceptionReported;
     }
 
     private function calculateIntegrityOf(string $data): string
@@ -117,12 +122,14 @@ class WebHookSenderService
         try {
             $webResponse = $client->send($webRequest);
         } catch (RequestException $e) {
+            $this->exceptionReported = $e;
             if ($e->hasResponse()) {
                 $webResponse = $e->getResponse();
             } else {
                 $this->reportNotResponseError($e, $webHookRequest);
             }
         } catch (GuzzleException $e) {
+            $this->exceptionReported = $e;
             $this->reportNotResponseError($e, $webHookRequest);
         }
 
