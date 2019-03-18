@@ -43,6 +43,6 @@ class Request extends Model
 
     public function payload()
     {
-        return $this->belongsTo(Payload::class, 'uuid', 'payload_uuid');
+        return $this->belongsTo(Payload::class);
     }
 }
