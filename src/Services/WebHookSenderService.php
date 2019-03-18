@@ -117,11 +117,24 @@ class WebHookSenderService
      */
     private function sendRequest(GuzzleClient $client, Request $webRequest, WebRequest $webHookRequest)
     {
+        \Log::debug('Sending Webhook', [
+            'url' => $webRequest->getUri()->__toString(),
+            'request_uuid' => $webHookRequest->uuid,
+            'payload_uuid' => $webHookRequest->payload->uuid,
+        ]);
+
         $webResponse = null;
 
         try {
             $webResponse = $client->send($webRequest);
         } catch (RequestException $e) {
+            \Log::error('Exception when sending webhook', [
+                'url' => $webRequest->getUri()->__toString(),
+                'request_uuid' => $webHookRequest->uuid,
+                'payload_uuid' => $webHookRequest->payload->uuid,
+                'exception' => $e,
+            ]);
+
             $this->exceptionReported = $e;
             if ($e->hasResponse()) {
                 $webResponse = $e->getResponse();
@@ -129,6 +142,13 @@ class WebHookSenderService
                 $this->reportNotResponseError($e, $webHookRequest);
             }
         } catch (GuzzleException $e) {
+            \Log::error('Generic Exception when sending webhook', [
+                'url' => $webRequest->getUri()->__toString(),
+                'request_uuid' => $webHookRequest->uuid,
+                'payload_uuid' => $webHookRequest->payload->uuid,
+                'exception' => $e,
+            ]);
+
             $this->exceptionReported = $e;
             $this->reportNotResponseError($e, $webHookRequest);
         }
