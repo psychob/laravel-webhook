@@ -32,4 +32,12 @@ class SendWebHookJob implements ShouldQueue
     {
         $service->send($this->payload);
     }
+
+    public function tags()
+    {
+        return [
+            'webhook',
+            'payload:'.$this->payload->uuid,
+        ];
+    }
 }
